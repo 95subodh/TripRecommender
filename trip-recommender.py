@@ -7,7 +7,7 @@ def hello():
 
 @app.route('/cakes')
 def cakes():
-	return 'Yummy cakes!'
+	return "Yummy cakes!"
  
 if __name__ == "__main__":
 	app.run()
