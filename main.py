@@ -3,7 +3,6 @@ from flask import jsonify
 from flask import make_response
 from flask import request, abort
 
-
 app = Flask(__name__)
 
 
@@ -22,38 +21,34 @@ def get_current_user():
 		b="2",
 		c="3"
 	)
-
-@app.route('/cakes')
-def cakes():
-	return "Yummy cakes!"
-
-tasks = [
-	{
-		'id': 1,
-		'title': u'Buy groceries',
-		'description': u'Milk, Cheese, Pizza, Fruit, Tylenol', 
-		'done': False
-	},
-	{
-		'id': 2,
-		'title': u'Learn Python',
-		'description': u'Need to find a good Python tutorial on the web', 
-		'done': False
-	}
-]
 	
-@app.route('/todo/api/v1.0/tasks', methods=['POST'])
-def create_task():
-	if not request.json or not 'title' in request.json:
+@app.route('/v1/recommendations', methods=['POST'])
+def get_recommendations():
+	if not request.json or not 'user' in request.json or not 'user_preferences' in request.json or not 'locations' in request.json:
 		abort(400)
-	task = {
-		'id': tasks[-1]['id'] + 1,
-		'title': request.json['title'],
-		'description': request.json.get('description', ""),
-		'done': False
-	}
-	tasks.append(task)
-	return jsonify({'task': task}), 201
+	user = request.json['user']
+	userpreference = request.json['user_preferences']
+	locations = request.json['locations']
+	
+	print user, request.json['locations'][0]['location_id']
+	
+	return jsonify({'locations': [
+						{
+							'locaction_id' : request.json['locations'][0]['location_id'],
+							'score' : 21
+						}
+					]				
+				  }), 201
+				
+@app.route('/v1/feedback', methods=['POST'])
+def get_recommendations():
+	if not request.json or not 'feedback' in request.json:
+		abort(400)
+	feedback = request.json['feedback']
+	
+#	print user, request.json['locations'][0]['location_id']
+	
+	return jsonify(''), 200
  
 if __name__ == "__main__":
 	app.run()
