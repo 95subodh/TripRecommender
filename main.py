@@ -2,6 +2,7 @@ from flask import Flask
 from flask import jsonify
 from flask import make_response
 from flask import request, abort
+from random import randrange
 
 app = Flask(__name__)
 
@@ -9,18 +10,10 @@ app = Flask(__name__)
 @app.errorhandler(404)
 def not_found(error):
 	return make_response(jsonify({'error': 'Not found'}), 404)
- 
+
 @app.route("/")
 def hello():
 	return "Hello World!"
-
-@app.route('/response')
-def get_current_user():
-	return jsonify(
-		a="1",
-		b="2",
-		c="3"
-	)
 	
 @app.route('/v1/recommendations', methods=['POST'])
 def get_recommendations():
@@ -32,13 +25,16 @@ def get_recommendations():
 	
 	print user, request.json['locations'][0]['location_id']
 	
-	return jsonify({'locations': [
-						{
-							'locaction_id' : request.json['locations'][0]['location_id'],
-							'score' : 21
-						}
-					]				
-				  }), 201
+	loc_arr = []
+	for i in xrange(len(locations)):
+		loc_arr.append(
+			{
+				'location_id' : request.json['locations'][i]['location_id'],
+				'score' : randrange(0,100)
+			}
+		)
+	
+	return jsonify({'locations': loc_arr}), 201
 				
 @app.route('/v1/feedback', methods=['POST'])
 def get_feedback():
