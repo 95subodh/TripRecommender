@@ -41,7 +41,7 @@ def get_recommendations():
 				  }), 201
 				
 @app.route('/v1/feedback', methods=['POST'])
-def get_recommendations():
+def get_feedback():
 	if not request.json or not 'feedback' in request.json:
 		abort(400)
 	feedback = request.json['feedback']
